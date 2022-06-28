@@ -1,32 +1,27 @@
-import pandas as pd
 import os
 
-# AWS_BUCKET_PATH = "s3://wagon-public-datasets/taxi-fare-train.csv"
-# AWS_BUCKET_PATH = "/home/chenjh2378/code/marcustan-94/TaxiFareModel/raw_data/train.csv"
+import pandas as pd
 
-current_dir = os.path.dirname(__file__)
-AWS_BUCKET_PATH = os.path.join(current_dir, '..', 'raw_data', 'train.csv')
+LOCAL_PATH = os.path.join(os.path.dirname(__file__), '..', 'raw_data', 'train.csv')
 
-def get_data(nrows=10_000):
-    '''returns a DataFrame with nrows from s3 bucket'''
-    df = pd.read_csv(AWS_BUCKET_PATH, nrows=nrows)
+def get_data(nrows=10_000, **kwargs):
+    '''returns a DataFrame with nrows'''
+    df = pd.read_csv(LOCAL_PATH, nrows=nrows)
     return df
 
 
-def clean_data(df, test=False):
+def clean_df(df):
     df = df.dropna(how='any', axis='rows')
     df = df[(df.dropoff_latitude != 0) | (df.dropoff_longitude != 0)]
     df = df[(df.pickup_latitude != 0) | (df.pickup_longitude != 0)]
+    df = df[(df['pickup_latitude'] != df['dropoff_latitude']) & \
+            (df['pickup_longitude'] != df['dropoff_longitude'])]
     if "fare_amount" in list(df):
-        df = df[df.fare_amount.between(0, 4000)]
-    df = df[df.passenger_count < 8]
-    df = df[df.passenger_count >= 0]
+        df = df[df['fare_amount'].between(0, 4000, inclusive='right')]
+    df = df[df.passenger_count <= 8]
+    df = df[df.passenger_count > 0]
     df = df[df["pickup_latitude"].between(left=40, right=42)]
     df = df[df["pickup_longitude"].between(left=-74.3, right=-72.9)]
     df = df[df["dropoff_latitude"].between(left=40, right=42)]
     df = df[df["dropoff_longitude"].between(left=-74, right=-72.9)]
     return df
-
-
-if __name__ == '__main__':
-    df = get_data()
