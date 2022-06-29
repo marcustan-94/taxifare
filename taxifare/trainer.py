@@ -1,4 +1,3 @@
-import category_encoders as ce
 import joblib
 import mlflow
 import pandas as pd
@@ -14,7 +13,6 @@ from sklearn.linear_model import Lasso, Ridge, LinearRegression
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from xgboost import XGBRegressor
 
 MLFLOW_URI = "https://mlflow.lewagon.ai/"
 EXPERIMENT_NAME = '[SG] [Singapore] [marcustan-94] taxifare v0'
@@ -110,11 +108,11 @@ if __name__ == "__main__":
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.15)
 
     model_list = [LinearRegression(),
-                #   Lasso(alpha=0.05),
-                #   Ridge(alpha=0.05),
-                #   SVR(kernel='rbf'),
-                #   SVR(kernel='linear'),
-                #   RandomForestRegressor()
+                  Lasso(alpha=0.05),
+                  Ridge(alpha=0.05),
+                  SVR(kernel='rbf'),
+                  SVR(kernel='linear'),
+                  RandomForestRegressor()
                   ]
     dist_encoder_list = ['dist', 'dist_to_center', 'both']
 
