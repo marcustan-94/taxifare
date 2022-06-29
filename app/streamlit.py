@@ -8,7 +8,7 @@ import requests
 import streamlit as st
 
 '''
-# Taxi Fare Prediction
+# Taxi Fare Predictor (New York City)
 '''
 
 def address_coord(entered_address):
@@ -119,9 +119,11 @@ if predict_button:
 disclaimer = st.markdown("""
                 ### **Disclaimer:**
 
-                This model was trained using data from Kaggle New York Taxi Fare dataset.
-                This accuracy of this model tends to decrease if:
+                Due to memory constraints of Heroku, the model loaded here is not
+                the optimized version as it has only been trained on a very small subset
+                of the dataset; hence this website is purely for demonstration purposes only.
 
-                1) The entered addresses are very far away from New York
-                2) The pickup and dropoff addresses are very far away from each other
+                While the website accepts addresses outside of New York city, the model
+                likely will not be able to give an accurate prediction, as the model
+                was trained using data from the Kaggle New York Taxi Fare dataset.
                 """)
