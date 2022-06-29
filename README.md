@@ -12,7 +12,8 @@ After performing data exploration to identify outliers, observe data distributio
   2. calculate distance features from the coordinates, such as haversine distance and distance to/from NYC center
 
 As expected, the distance between the pickup and dropoff locations is the most important determinant of taxi fare, with a good correlation of R^2 = 0.85.
-![correlation](images/correlation.png) ![distance-fare](images/distance-fare.png)
+<img src="images/correlation.png" alt="correlation" width="400"/>
+<img src="images/distance-fare.png" alt="distance-fare" width="400"/>
 
 On the other hand, while the hour of the day appears to have no correlation with the fare amount, there seems to be a cyclical pattern as observed in the graph below, with fare amount peaking at around midnight and noon, the former due to midnight surcharges.
 
