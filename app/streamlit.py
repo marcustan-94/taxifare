@@ -12,41 +12,56 @@ import streamlit as st
 '''
 CSS = """
 .css-fg4pbf {background: #FFFFE8;}
+.st-bz {background-color: white;}
 .st-br {background-color: white;}
 """
 st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
 
 
 def address_coord(entered_address):
+    """Checks whether the address entered is valid and extracts the
+    coordinates through an API
+    """
     api_url = 'https://nominatim.openstreetmap.org/search'
     response = requests.get(api_url, params={'q':entered_address,
                                                 'format':'json'}).json()
 
-    for address in response:
+    # Check if address is in New York and append the correct addresses to new_york
+    new_york = []
+    for ny_address in response:
+        ny_address_split = ny_address['display_name'].split(', ')
+        if ny_address_split[-1] == "United States" and\
+                (ny_address_split[-2] == "New York" or\
+                 ny_address_split[-3] == "New York"):
+            new_york.append(ny_address)
+
+    for address in new_york:
         if address['display_name'].lower() == entered_address:
             lon = float(address['lon'])
             lat = float(address['lat'])
             return lon, lat
 
-    if len(response) == 1:
+    if len(new_york) == 1:
         st.markdown("*We found one possible address but it doesn't match your query exactly.\
                 Please refine your search or copy this address into the query box.*")
         st.markdown(f"""`{address['display_name']}`""")
-    elif len(response) > 1:
+    elif len(new_york) > 1:
         st.write("*We found multiple possible addresses. Please refine your search or\
                 copy one of the addresses below into the query box:*")
         for index, address in enumerate(response[:3]):
             st.markdown(f"""`{index + 1})  {address['display_name']}`""")
-    elif len(response) == 0 and entered_address != "":
+    elif len(new_york) == 0 and entered_address != "":
         st.write("*No addresses were found. Please refine your search.*")
 
     return -9999, -9999
 
+# Creating an empty coord_df to allow the map to display
+coord_df = pd.DataFrame()
 
 # Creating boxes for user input
 columns = st.columns(3)
-date = columns[0].date_input("Enter date", datetime.date(2019, 7, 6))
-time = columns[1].time_input('Enter time', datetime.time(8, 45))
+date = columns[0].date_input("Enter date", datetime.date.today())
+time = columns[1].time_input('Enter time', datetime.time(12, 00))
 date_and_time = datetime.datetime.combine(date, time)
 passenger_count = columns[2].selectbox('Number of passengers', list(range(1, 9)))
 
@@ -102,7 +117,6 @@ if predict_button:
         # Plot coordinates on a map
         coord_df = pd.DataFrame({'lat': [pickup_latitude, dropoff_latitude],
                                 'lon': [pickup_longitude, dropoff_longitude]})
-        st.map(coord_df)
 
     ############################################################################
     # Using API
@@ -122,6 +136,8 @@ if predict_button:
     # fare = round(response['fare'], 2)
     # st.markdown(f'## Predicted fare: `{fare}`')
 
+st.map(coord_df)
+
 disclaimer = st.markdown("""
                 ### **Disclaimer:**
 
@@ -129,7 +145,7 @@ disclaimer = st.markdown("""
                 the optimized version as it has only been trained on a very small subset
                 of the dataset; hence this website is purely for demonstration purposes only.
 
-                While the website accepts addresses outside of New York city, the model
-                likely will not be able to give an accurate prediction, as the model
-                was trained using data from the Kaggle New York Taxi Fare dataset.
+                The website does not accept addresses outside of New York city. Hence, even
+                if you entered a valid address (e.g. New Zealand), an error will pop up saying
+                that no addresses were found.
                 """)
