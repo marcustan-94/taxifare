@@ -43,7 +43,7 @@ def address_coord(entered_address):
 
     if len(new_york) == 1:
         st.markdown("*We found one possible address but it doesn't match your query exactly.\
-                Please refine your search or copy this address into the query box.*")
+                Please refine your search or copy this address into the query box:*")
         st.markdown(f"""`{address['display_name']}`""")
     elif len(new_york) > 1:
         st.write("*We found multiple possible addresses. Please refine your search or\

@@ -1,5 +1,5 @@
 # Taxi Fare Predictor (New York City)
-- Objective: The objective of this project is to predict the taxi fare for a taxi ride in New York City given the pickup and dropoff locations.
+- Objective: To predict the taxi fare for a taxi ride in New York City given the pickup and dropoff locations, date, time and passenger count
 - Data source: [Kaggle](https://www.kaggle.com/competitions/new-york-city-taxi-fare-prediction/overview)
   - The dataset contains 7 columns, namely pickup and dropoff latitudes and longitudes, passenger count, datetime, and fare amount
 - Type of analysis: Regression
@@ -25,18 +25,20 @@ It appears that there is no clear trend between passenger count and fare amount,
 
 
 ## Step 2 - Model training
-A pipeline was first built to include preprocessing methods such as scaling the dataset and one hot encoding categorical features. Different regression models such as support vector machines, lasso regressors were tested out, each of these models using their default hyperparameters. The **random forest regressor** model came out on top, with an **RMSE score of 3.1**, while the other models had RMSE scores of around 4 to 5 on average. Thereafter, a random search was performed, followed by a grid search, to fine-tune and optimise the hyperparameters. The final random forest regressor model had an RMSE score of xx.
+A pipeline was first built to include preprocessing methods such as scaling the dataset and one hot encoding categorical features. Different regression models such as support vector machines, lasso regressors were tested out, each of these models using their default hyperparameters. The **random forest regressor** model came out on top, with an **RMSE score of 3.1**, while the other models had RMSE scores of around 4 to 5 on average. Thereafter, a random search was performed, followed by a grid search, to fine-tune and optimise the hyperparameters. The final random forest regressor model had an RMSE score of xx (TBU).
 
 The full dataset contains around 55 million rows; in order to be able to train the model locally, only 1 million rows were used.
 
 ## Step 3 - Model deployment
-The model and relevant code were packaged into a web application using **Streamlit**, and deployed using **Heroku**.The link to the web application is as follows: [https://taxifare-marcus.herokuapp.com/](https://taxifare-marcus.herokuapp.com/)(*Note: because we are using the free tier of Heroku, the Heroku dynos become idle when the website is not used for a while. Hence when loading the webpage for the first time, it takes about 30-60 seconds for the dynos to restart and get the page to load. Subsequent refreshes of the webpage will be much faster.*)
+The model and relevant code were packaged into a web application using **Streamlit**, and deployed using **Heroku**.The link to the web application is as follows: [https://taxifare-marcus.herokuapp.com/](https://taxifare-marcus.herokuapp.com/)
+
+(*Note: because we are using the free tier of Heroku, the Heroku dynos become idle when the website is not used for a while. Hence when loading the webpage for the first time, it takes about 30-60 seconds for the dynos to restart and get the page to load. Subsequent refreshes of the webpage will be much faster.*)
 
 In the webpage, the user is prompted to enter the date, time, number of passengers, pickup and dropoff addresses. If the address entered is ambiguous, a prompt will appear with some suggested addresses. If an invalid address is entered, an error will pop out as well.
 
 ![website1](images/website1.png)
 
-After the user has filled in the boxes with valid addresses and clicks the button "Predict Taxi Fare", the map refreshes, displaying the entered locations on the map as two red dots, and the predicted fare appears on top of the map as well.
+After the user has filled in the boxes with valid addresses and clicks the button "Predict Taxi Fare", the map refreshes, displaying the entered locations on the map as two red dots, and the predicted fare appears above the map as well.
 
 ![website2](images/website2.png)
 
