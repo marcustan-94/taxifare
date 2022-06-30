@@ -10,6 +10,12 @@ import streamlit as st
 '''
 # Taxi Fare Predictor (New York City)
 '''
+CSS = """
+.css-fg4pbf {background: #FFFFE8;}
+.st-br {background-color: white;}
+"""
+st.write(f'<style>{CSS}</style>', unsafe_allow_html=True)
+
 
 def address_coord(entered_address):
     api_url = 'https://nominatim.openstreetmap.org/search'
